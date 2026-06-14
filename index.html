@@ -137,7 +137,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .empty-state svg{width:56px;height:56px;opacity:0.3;margin-bottom:12px;}
 .empty-state p{font-size:15px;}
 /* PDF hidden render area — always light mode */
-#pdf-render{position:fixed;top:-9999px;left:-9999px;width:794px;background:#fff;font-family:Arial,sans-serif;direction:rtl;z-index:-1;color-scheme:light;}
+#pdf-render{position:absolute;top:0;left:-99999px;width:794px;height:auto;background:#fff;font-family:Arial,sans-serif;direction:rtl;z-index:-9999;color-scheme:light;pointer-events:none;}
 .pdf-page{padding:30px;width:794px;}
 .pdf-title{text-align:center;font-size:22px;font-weight:bold;color:#1a3a5c;margin-bottom:4px;}
 .pdf-sub{text-align:center;font-size:14px;color:#555;margin-bottom:4px;}
@@ -162,6 +162,16 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .emp-detail-avatar{width:60px;height:60px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0;}
 .payment-edit-btn{background:none;border:none;cursor:pointer;color:#7c3aed;font-size:12px;padding:2px 4px;border-radius:4px;}
 .payment-edit-btn:active{background:#ede9fe;}
+/* ====== قاعدة التخزين ====== */
+.archive-item{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border);margin-bottom:12px;box-shadow:var(--shadow);}
+.archive-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.archive-item-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.archive-item-meta{font-size:12px;color:var(--text3);}
+.archive-badge{background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.archive-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.pdf-viewer-frame{width:100%;height:68vh;border:none;border-radius:8px;background:#f0f4f8;}
+.transfer-emp-file-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.transfer-emp-file-item:last-child{border-bottom:none;}
 </style>
 </head>
 <body>
@@ -211,6 +221,13 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
     <div class="nav-card" onclick="goTo('calculator')">
       <div class="nav-card-icon ic-teal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M8 10h1m4 0h1M8 14h1m4 0h1M8 18h1m4 0h1"/></svg></div>
       <h3>الآلة الحاسبة</h3><p>عمليات حسابية</p>
+    </div>
+    <div class="nav-card nav-card-full" onclick="goTo('storage-base')">
+      <div class="nav-card-icon ic-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg></div>
+      <div>
+        <h3>قاعدة التخزين</h3>
+        <p>أرشيف التقارير الأسبوعية المحفوظة</p>
+      </div>
     </div>
   </div>
   <div style="padding:16px;">
@@ -348,12 +365,27 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
   <div class="content" id="insp-detail-content"></div>
 </div>
 
+<!-- STORAGE BASE -->
+<div class="screen" id="storage-base">
+  <div class="section-header">
+    <button class="back-btn" onclick="goBack()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+    <span class="section-title">قاعدة التخزين</span>
+    <button class="icon-btn" onclick="loadStorageBase()"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+  </div>
+  <div class="content" id="storage-base-content">
+    <div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg><p>اضغط على تحديث لتحميل البيانات</p></div>
+  </div>
+</div>
+
 <!-- EMPLOYEES LIST -->
 <div class="screen" id="employees">
   <div class="section-header">
     <button class="back-btn" onclick="goBack()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
     <span class="section-title">الموظفين</span>
-    <button class="icon-btn" onclick="loadEmployees()"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+    <div style="display:flex;gap:6px;">
+      <button class="icon-btn" onclick="openAddEmployeePopup()" title="إضافة موظف جديد"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></button>
+      <button class="icon-btn" onclick="loadEmployees()"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+    </div>
   </div>
   <div class="content">
     <div class="form-group">
@@ -396,9 +428,21 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
         <label class="form-label">رقم الهاتف</label>
         <input type="tel" class="form-input" id="emp-detail-phone-input" placeholder="مثال: 00224621000000">
       </div>
+      <div class="form-group">
+        <label class="form-label">الراتب اليومي</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="number" class="form-input" id="emp-detail-daily-salary" placeholder="0" min="0" style="flex:1;">
+          <span style="font-size:13px;color:var(--text3);white-space:nowrap;">يومياً</span>
+        </div>
+      </div>
+      <div id="emp-insp-summary" style="font-size:12px;color:var(--text3);margin-bottom:10px;padding:8px 12px;background:var(--surface2);border-radius:8px;display:none;"></div>
       <button class="btn btn-primary" onclick="saveEmployeeEdit()" style="margin-bottom:12px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         حفظ البيانات
+      </button>
+      <button class="btn btn-outline" onclick="openTransferEmpModal()" style="margin-bottom:12px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        تحويل الموظف
       </button>
       <div class="btn-row">
         <button class="btn btn-whatsapp" onclick="notifyEmpFromDetail()">
@@ -505,9 +549,16 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="card">
       <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">معلومات التطبيق</h3>
-      <div style="font-size:13px;color:var(--text2);line-height:2.2;">
+      <div style="font-size:13px;color:var(--text2);line-height:2.4;">
         <div>الاسم: مؤسسة المنى &nbsp;|&nbsp; الإصدار: 3.0.0</div>
-        <div>Spreadsheet ID: 1KSGUOUYPNwa7aNtJdDXkjVbLjYt0WkRt9rBfZ1dO0wU</div>
+        <div>المطور: <strong style="color:var(--text);">علاء محمد الحاجي</strong></div>
+        <div>رقم الهاتف: <strong style="color:var(--text);">+9630983528954</strong></div>
+      </div>
+      <div style="margin-top:16px;">
+        <button onclick="openWhatsAppDeveloper()" style="display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:#25d366;color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity 0.2s;" onmousedown="this.style.opacity='0.85'" onmouseup="this.style.opacity='1'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          تواصل عبر واتساب
+        </button>
       </div>
     </div>
   </div>
@@ -571,6 +622,21 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<!-- Generic Confirm Dialog Modal -->
+<div class="modal-overlay" id="generic-confirm-modal">
+  <div class="modal">
+    <div class="modal-title" id="generic-confirm-title" style="display:flex;align-items:center;gap:10px;">
+      <svg id="generic-confirm-icon" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:#dc2626;"></svg>
+      <span id="generic-confirm-title-text"></span>
+    </div>
+    <p id="generic-confirm-message" style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.8;white-space:pre-line;"></p>
+    <div class="btn-row">
+      <button class="btn btn-danger" id="generic-confirm-ok-btn">تأكيد</button>
+      <button class="btn btn-outline" onclick="closeModal('generic-confirm-modal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <!-- Attendance Modal -->
 <div class="modal-overlay" id="attendance-modal">
   <div class="modal" style="max-height:90vh;">
@@ -602,8 +668,18 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
       <label class="form-label">رقم الهاتف (اختياري، مع رمز الدولة)</label>
       <input type="tel" class="form-input" id="add-emp-phone" placeholder="مثال: 00224621000000">
     </div>
+    <div class="form-group">
+      <label class="form-label">الراتب اليومي (اختياري)</label>
+      <input type="number" class="form-input" id="add-emp-salary" placeholder="0" min="0">
+    </div>
+    <div class="form-group" id="add-emp-insp-group" style="display:none;">
+      <label class="form-label">إضافة إلى ملف التفقد (اختياري)</label>
+      <select class="form-select" id="add-emp-insp-file">
+        <option value="">-- لا تضف لملف تفقد --</option>
+      </select>
+    </div>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="confirmAddEmployee()">✓ إضافة وحفظ</button>
+      <button class="btn btn-primary" onclick="confirmAddEmployee()">إضافة وحفظ</button>
       <button class="btn btn-outline" onclick="closeModal('add-emp-modal')">إلغاء</button>
     </div>
   </div>
@@ -733,6 +809,7 @@ function goTo(screen) {
   if (screen === "transactions-reg") initRegForm();
   if (screen === "employees") loadEmployees();
   if (screen === "employee-detail") loadEmployeeDetail();
+  if (screen === "storage-base") loadStorageBase();
 }
 function goBack() { goTo(prevScreen === currentScreen ? "home" : prevScreen); }
 
@@ -759,7 +836,33 @@ function hideLoading() { document.getElementById("loading").classList.remove("sh
 function openModal(id) { document.getElementById(id).classList.add("open"); }
 function closeModal(id) { document.getElementById(id).classList.remove("open"); }
 
+// ===================== GENERIC CONFIRM DIALOG =====================
+function showConfirmDialog(title, message, onConfirm, confirmLabel) {
+  document.getElementById("generic-confirm-title-text").textContent = title;
+  document.getElementById("generic-confirm-message").textContent = message;
+  const okBtn = document.getElementById("generic-confirm-ok-btn");
+  okBtn.textContent = confirmLabel || "تأكيد";
+  const icon = document.getElementById("generic-confirm-icon");
+  icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>';
+  const newBtn = okBtn.cloneNode(true);
+  newBtn.textContent = confirmLabel || "تأكيد";
+  okBtn.parentNode.replaceChild(newBtn, okBtn);
+  newBtn.addEventListener("click", function() {
+    closeModal("generic-confirm-modal");
+    onConfirm();
+  });
+  openModal("generic-confirm-modal");
+}
+
 // ===================== SETTINGS =====================
+function openWhatsAppDeveloper() {
+  const phone = "9630983528954";
+  const waUrl = "https://wa.me/" + phone;
+  if (typeof window !== "undefined") {
+    window.open(waUrl, "_blank");
+  }
+}
+
 function saveSettings() {
   const url = document.getElementById("settings-webapp-url").value.trim();
   if (!url) { showToast("يرجى إدخال رابط Web App", "error"); return; }
@@ -1115,22 +1218,56 @@ function renderHiddenEmployees(empMap) {
   }).join("");
 }
 
-// ===================== PDF (HTML2CANVAS) — DARK MODE FIXED =====================
+// ===================== PDF (HTML2CANVAS) — NO CLIPPING, NO EMPTY PDF =====================
 async function captureAndDownload(htmlContent, filename, w = 794, h = null) {
+  if (!htmlContent || htmlContent.trim() === "") {
+    showToast("لا توجد بيانات لإنشاء PDF", "error");
+    return;
+  }
   const zone = document.getElementById("pdf-render");
   zone.innerHTML = htmlContent;
   zone.style.width = w + "px";
-  zone.style.top = "-9999px";
-  zone.style.left = "-9999px";
-  zone.style.position = "fixed";
-  // Save current theme and force light mode during PDF render
+  zone.style.height = "auto";
+  zone.style.position = "absolute";
+  // top:0 is required — browsers skip rendering elements far below/above viewport
+  zone.style.top = "0";
+  zone.style.left = "-99999px";
+  zone.style.visibility = "visible";
+  zone.style.pointerEvents = "none";
+  zone.style.zIndex = "-9999";
   const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
   document.documentElement.setAttribute("data-theme", "light");
-  document.body.appendChild(zone);
-  await new Promise(r => setTimeout(r, 350));
+  if (!document.body.contains(zone)) document.body.appendChild(zone);
+  await new Promise(r => setTimeout(r, 500));
+  const contentHeight = zone.scrollHeight || zone.offsetHeight;
+  if (!contentHeight || contentHeight < 30) {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    zone.innerHTML = "";
+    showToast("فشل إنشاء التقرير: المحتوى فارغ — حاول مرة أخرى", "error");
+    return;
+  }
   try {
-    const canvas = await html2canvas(zone, { scale: 2, useCORS: true, logging: false, width: w, backgroundColor: "#ffffff" });
+    const canvas = await html2canvas(zone, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      width: w,
+      height: contentHeight,
+      backgroundColor: "#ffffff",
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: w + 200,
+      windowHeight: contentHeight + 200
+    });
+    if (!canvas || canvas.width < 10 || canvas.height < 10) {
+      showToast("فشل إنشاء PDF: الصورة فارغة — حاول مرة أخرى", "error");
+      return;
+    }
     const imgData = canvas.toDataURL("image/jpeg", 0.95);
+    if (!imgData || imgData.length < 100) {
+      showToast("فشل إنشاء PDF: بيانات تالفة — حاول مرة أخرى", "error");
+      return;
+    }
     const { jsPDF } = window.jspdf;
     const pdfW = 210;
     const pdfH = (canvas.height / canvas.width) * pdfW;
@@ -1143,7 +1280,6 @@ async function captureAndDownload(htmlContent, filename, w = 794, h = null) {
     doc.addImage(imgData, "JPEG", 0, 0, pdfW, pdfH);
     doc.save(filename);
   } finally {
-    // Always restore the original theme
     document.documentElement.setAttribute("data-theme", currentTheme);
     zone.innerHTML = "";
   }
@@ -1324,30 +1460,55 @@ async function loadInspectionData(i) {
 function renderInspectionDetail(workers, file, fileIdx) {
   const content = document.getElementById("insp-detail-content");
   if (!workers || !workers.length) { content.innerHTML = '<div class="empty-state"><p>لا توجد بيانات</p></div>'; return; }
+  const DAYS = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
   const rows = workers.map((w, idx) => {
     const netCls = parseFloat(w.netSalary) >= 0 ? "tx-amount-pos" : "tx-amount-neg";
-    const totalOT = Array.isArray(w.overtimeDetail) ? w.overtimeDetail.reduce((s,v)=>s+v,0) : parseFloat(w.overtime)||0;
-    return `<tr>
-      <td style="font-weight:600;text-align:right;padding-right:8px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${w.name}">${w.name}</td>
-      <td id="days-display-${idx}" style="font-weight:700;color:#2563a8;">${w.days}</td>
-      <td id="ot-display-${idx}" style="color:#7c3aed;">${totalOT > 0 ? totalOT+"h" : "—"}</td>
-      <td onclick="openEditPaymentModal(${idx},${fileIdx})" style="cursor:pointer;" title="اضغط لتعديل الدفعات">
-        ${Number(w.payments).toLocaleString()} <span style="font-size:10px;color:#7c3aed;">✏️</span>
-      </td>
-      <td class="${netCls}" style="font-weight:700;">${Number(w.netSalary).toLocaleString()}</td>
-      <td style="white-space:nowrap;">
-        <button class="btn btn-sm" style="background:#7c3aed;color:#fff;border:none;font-size:11px;padding:5px 8px;margin-bottom:4px;display:block;width:100%;" onclick="openAttendanceModal(${idx},${fileIdx})">✏️ حضور</button>
-        <button class="btn btn-sm btn-success" onclick="saveWorkerSalary(${idx},${fileIdx})" style="font-size:11px;padding:5px 8px;display:block;width:100%;">💾 راتب</button>
-      </td>
-    </tr>`;
+    const daysArr = Array.isArray(w.daysDetail) ? w.daysDetail : Array(7).fill(false);
+    const otArr   = Array.isArray(w.overtimeDetail) ? w.overtimeDetail : Array(7).fill(0);
+    const totalOT = otArr.reduce((s,v)=>s+v, 0);
+    const dayChips = DAYS.map((d, i) => {
+      if (daysArr[i]) {
+        const lbl = otArr[i] > 0 ? d + " (" + otArr[i] + "h)" : d;
+        return '<span style="display:inline-block;padding:2px 7px;background:#dcfce7;color:#15803d;border-radius:5px;font-size:11px;font-weight:700;margin:2px;">' + lbl + '</span>';
+      } else if (otArr[i] > 0) {
+        return '<span style="display:inline-block;padding:2px 7px;background:#fef9c3;color:#854d0e;border-radius:5px;font-size:11px;margin:2px;">' + d + ' (' + otArr[i] + 'h)</span>';
+      }
+      return "";
+    }).filter(Boolean).join("");
+    const salaryLine = w.dailySalary ? '<div style="margin-top:8px;font-size:12px;color:var(--text3);">الراتب اليومي: <strong style="color:var(--text);">' + Number(w.dailySalary).toLocaleString() + '</strong></div>' : "";
+    return '<tr id="wrow-' + idx + '">'
+      + '<td style="font-weight:600;text-align:right;padding-right:6px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + w.name + '">'
+      +   '<button onclick="toggleWorkerExpand(' + idx + ')" id="exbtn-' + idx + '" style="background:none;border:none;cursor:pointer;padding:0 4px 0 0;color:#7c3aed;font-size:13px;line-height:1;">&#9654;</button>' + w.name
+      + '</td>'
+      + '<td style="font-weight:700;color:#2563a8;">' + w.days + '</td>'
+      + '<td style="color:#7c3aed;">' + (totalOT > 0 ? totalOT + "h" : "—") + '</td>'
+      + '<td onclick="openEditPaymentModal(' + idx + ',' + fileIdx + ')" style="cursor:pointer;" title="اضغط لتعديل الدفعات">' + Number(w.payments).toLocaleString() + ' <span style="font-size:10px;color:#7c3aed;">✏️</span></td>'
+      + '<td class="' + netCls + '" style="font-weight:700;">' + Number(w.netSalary).toLocaleString() + '</td>'
+      + '<td style="white-space:nowrap;">'
+      +   '<button class="btn btn-sm" style="background:#7c3aed;color:#fff;border:none;font-size:11px;padding:5px 8px;margin-bottom:4px;display:block;width:100%;" onclick="openAttendanceModal(' + idx + ',' + fileIdx + ')">حضور</button>'
+      +   '<button class="btn btn-sm btn-success" onclick="saveWorkerSalary(' + idx + ',' + fileIdx + ')" style="font-size:11px;padding:5px 8px;display:block;width:100%;">راتب</button>'
+      + '</td>'
+      + '</tr>'
+      + '<tr id="wexp-' + idx + '" style="display:none;">'
+      +   '<td colspan="6" style="padding:10px 14px;background:var(--surface2);border-bottom:2px solid var(--border);">'
+      +     '<div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:600;">تفاصيل أيام الأسبوع:</div>'
+      +     '<div style="display:flex;flex-wrap:wrap;gap:3px;">' + (dayChips || '<span style="color:var(--text3);font-size:12px;">لا توجد أيام مسجلة</span>') + '</div>'
+      +     salaryLine
+      +   '</td>'
+      + '</tr>';
   }).join("");
-  content.innerHTML = `
-    <div class="card" style="overflow-x:auto;padding:0;">
-      <table class="worker-table">
-        <thead><tr><th style="text-align:right;padding-right:8px;">الاسم</th><th>الأيام</th><th>إضافي</th><th>الدفعات</th><th>الصافي</th><th></th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
+  content.innerHTML =
+    '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">'
+    +   '<button class="btn btn-sm btn-danger" onclick="clearInspectionTable(' + fileIdx + ')">تفريغ الجدول</button>'
+    +   '<button class="btn btn-sm" style="background:#1a3a5c;color:#fff;border:none;" onclick="archiveInspectionTable(' + fileIdx + ')">تخزين الجدول</button>'
+    +   '<button class="btn btn-sm" style="background:#7c3aed;color:#fff;border:none;" onclick="generateInspectionPDF(' + fileIdx + ')">PDF</button>'
+    + '</div>'
+    + '<div class="card" style="overflow-x:auto;padding:0;">'
+    +   '<table class="worker-table">'
+    +     '<thead><tr><th style="text-align:right;padding-right:8px;">الاسم</th><th>الأيام</th><th>إضافي</th><th>الدفعات</th><th>الصافي</th><th></th></tr></thead>'
+    +     '<tbody>' + rows + '</tbody>'
+    +   '</table>'
+    + '</div>';
   content._workers = workers;
   content._fileIdx = fileIdx;
   content._fileName = file.name;
@@ -1367,61 +1528,9 @@ async function generateInspectionPDF(fileIdx) {
 
 async function buildInspectionPDF(workers, fileName) {
   showLoading("جاري إنشاء PDF التفقد...");
-  const today = new Date().toLocaleDateString("ar-EG");
-  const rows = workers.map((w, i) => {
-    const net = parseFloat(w.netSalary) || 0;
-    const full = parseFloat(w.fullSalary) || 0;
-    const pay = parseFloat(w.payments) || 0;
-    const netStyle = net >= 0 ? "background:#dcfce7;color:#15803d;font-weight:bold;" : "background:#fee2e2;color:#dc2626;font-weight:bold;";
-    const bg = i % 2 === 0 ? "#fff" : "#f0f4f8";
-    return `<tr style="background:${bg}">
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;">${i+1}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:right;font-weight:bold;">${w.name}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;">${w.days}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;">${w.overtime}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;">${pay.toLocaleString()}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;font-weight:bold;">${full.toLocaleString()}</td>
-      <td style="padding:8px 6px;border:1px solid #e2e8f0;text-align:center;${netStyle}">${net >= 0 ? "+":""} ${net.toLocaleString()}</td>
-    </tr>`;
-  }).join("");
-  const totDays = workers.reduce((s, w) => s + (parseInt(w.days)||0), 0);
-  const totOT = workers.reduce((s, w) => s + (parseFloat(w.overtime)||0), 0);
-  const totPay = workers.reduce((s, w) => s + (parseFloat(w.payments)||0), 0);
-  const totFull = workers.reduce((s, w) => s + (parseFloat(w.fullSalary)||0), 0);
-  const totNet = workers.reduce((s, w) => s + (parseFloat(w.netSalary)||0), 0);
-  const htmlContent = `<div style="padding:24px;width:860px;background:#fff;font-family:Arial,sans-serif;direction:rtl;color:#1a2332;">
-    <img src="${PDF_LOGO}" style="width:70px;height:70px;object-fit:contain;display:block;margin:0 auto 6px;">
-    <div style="text-align:center;font-size:20px;font-weight:bold;color:#1a3a5c;margin-bottom:4px;">مؤسسة المنى | Societe Almouna</div>
-    <div style="text-align:center;font-size:15px;color:#7c3aed;font-weight:bold;margin-bottom:4px;">تقرير التفقد الأسبوعي</div>
-    <div style="text-align:center;font-size:13px;color:#555;margin-bottom:4px;">الملف: ${fileName}</div>
-    <div style="text-align:center;font-size:12px;color:#888;margin-bottom:20px;">تاريخ التقرير: ${today}</div>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-      <thead>
-        <tr style="background:#1a3a5c;color:#fff;">
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">#</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">الاسم</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">الأيام</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">ساعات إضافية</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">الدفعات</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;">الراتب الكامل</th>
-          <th style="padding:10px 6px;text-align:center;border:1px solid #2d4a6e;min-width:90px;">الراتب الصافي</th>
-        </tr>
-      </thead>
-      <tbody>${rows}
-        <tr style="background:#d4a017;">
-          <td colspan="2" style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;font-size:13px;">الإجمالي</td>
-          <td style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;">${totDays}</td>
-          <td style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;">${totOT}</td>
-          <td style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;">${totPay.toLocaleString()}</td>
-          <td style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;">${totFull.toLocaleString()}</td>
-          <td style="padding:10px 6px;text-align:center;border:1px solid #b38a00;font-weight:bold;color:#fff;">${totNet >= 0 ? "+":""} ${totNet.toLocaleString()}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="margin-top:20px;text-align:center;font-size:11px;color:#888;">مؤسسة المنى - إدارة المحاسبة المالية</div>
-  </div>`;
+  const htmlContent = buildInspectionPDFHtml(workers, fileName);
   try {
-    await captureAndDownload(htmlContent, "تفقد_" + fileName.replace(/\s/g,"_") + ".pdf", 860);
+    await captureAndDownload(htmlContent, "تفقد_" + fileName.replace(/ /g,"_") + ".pdf", 1060);
     hideLoading();
     showToast("تم تحميل PDF التفقد", "success");
   } catch(e) { hideLoading(); showToast("خطأ في إنشاء PDF", "error"); console.error(e); }
@@ -1547,25 +1656,189 @@ async function confirmAttendance() {
 function openAddEmployeePopup() {
   document.getElementById("add-emp-input").value = "";
   document.getElementById("add-emp-phone").value = "";
+  document.getElementById("add-emp-salary").value = "";
+  const grp = document.getElementById("add-emp-insp-group");
+  const sel = document.getElementById("add-emp-insp-file");
+  if (sel) {
+    sel.innerHTML = '<option value="">-- لا تضف لملف تفقد --</option>';
+    inspectionFiles.forEach(function(f, i) {
+      sel.innerHTML += '<option value="' + i + '">' + f.name + '</option>';
+    });
+    if (grp) grp.style.display = inspectionFiles.length ? "block" : "none";
+  }
   openModal("add-emp-modal");
-  setTimeout(() => document.getElementById("add-emp-input").focus(), 300);
+  setTimeout(function() { document.getElementById("add-emp-input").focus(); }, 300);
 }
 
 async function confirmAddEmployee() {
-  const name  = document.getElementById("add-emp-input").value.trim();
-  const phone = document.getElementById("add-emp-phone").value.trim();
+  const name        = document.getElementById("add-emp-input").value.trim();
+  const phone       = document.getElementById("add-emp-phone").value.trim();
+  const dailySalary = parseFloat(document.getElementById("add-emp-salary").value) || 0;
+  const inspVal     = document.getElementById("add-emp-insp-file") ? document.getElementById("add-emp-insp-file").value : "";
+  const inspIdx     = inspVal !== "" ? parseInt(inspVal) : -1;
   if (!name) { showToast("يرجى إدخال اسم الموظف", "error"); return; }
   if (!WEBAPP_URL) { showToast("يرجى إعداد رابط Web App أولاً", "error"); return; }
   closeModal("add-emp-modal");
   showLoading("جاري إضافة الموظف...");
   try {
     const res = await apiPost("addEmployee", { name, phone });
+    if (!res.success) { hideLoading(); showToast(res.error || "خطأ في الإضافة", "error"); return; }
+    if (inspIdx >= 0 && inspectionFiles[inspIdx]) {
+      await apiPost("addWorkerToInspection", { sheetId: inspectionFiles[inspIdx].id, name, dailySalary });
+    }
+    hideLoading();
+    showToast("تمت إضافة " + name, "success");
+    await loadEmployeesForForm(name);
+  } catch(e) { hideLoading(); showToast("خطأ في الاتصال", "error"); }
+}
+
+
+// ===== INSPECTION TABLE ACTIONS =====
+function toggleWorkerExpand(idx) {
+  const row = document.getElementById("wexp-" + idx);
+  const btn = document.getElementById("exbtn-" + idx);
+  if (!row) return;
+  const open = row.style.display !== "none";
+  row.style.display = open ? "none" : "table-row";
+  if (btn) btn.innerHTML = open ? "&#9654;" : "&#9660;";
+}
+
+async function clearInspectionTable(fileIdx) {
+  const file = inspectionFiles[fileIdx];
+  if (!file) return;
+  showConfirmDialog(
+    "تفريغ الجدول",
+    "هل أنت متأكد من تفريغ الجدول؟\nسيتم مسح جميع بيانات الحضور والساعات والمدفوعات.\nلا يمكن التراجع عن هذه العملية.",
+    async function() {
+      if (!WEBAPP_URL) { showToast("يرجى إعداد رابط Web App أولاً", "error"); return; }
+      showLoading("جاري تفريغ الجدول...");
+      try {
+        const res = await apiPost("clearInspectionData", { sheetId: file.id });
+        hideLoading();
+        if (res.success) {
+          showToast("تم تفريغ الجدول بنجاح", "success");
+          await loadInspectionData(fileIdx);
+        } else {
+          showToast(res.error || "خطأ في تفريغ الجدول", "error");
+        }
+      } catch(e) { hideLoading(); showToast("خطأ في الاتصال", "error"); }
+    },
+    "تفريغ الجدول"
+  );
+}
+
+async function archiveInspectionTable(fileIdx) {
+  const file = inspectionFiles[fileIdx];
+  if (!file) return;
+  if (!WEBAPP_URL) { showToast("يرجى إعداد رابط Web App أولاً", "error"); return; }
+  const content = document.getElementById("insp-detail-content");
+  const workers = content._workers;
+  if (!workers || !workers.length) { showToast("لا توجد بيانات للتخزين", "error"); return; }
+  showLoading("جاري التخزين وإنشاء PDF...");
+  try {
+    const now = new Date();
+    const archiveDate = now.toLocaleDateString("ar-EG");
+    const archiveTime = now.toLocaleTimeString("ar-EG");
+    const res = await apiPost("archiveInspectionData", {
+      tableName: file.name,
+      archiveDate,
+      archiveTime,
+      workerCount: workers.length
+    });
+    // Generate PDF as data URL (stored internally — no auto-download)
+    let pdfDataUrl = null;
+    try {
+      pdfDataUrl = await buildInspectionPDFDataUrl(workers, file.name);
+    } catch(pdfErr) { console.error("PDF gen error:", pdfErr); }
+    // Save metadata to localStorage
+    const record = {
+      id: now.getTime().toString(),
+      tableName: file.name,
+      archiveDate,
+      archiveTime,
+      workerCount: workers.length,
+      status: "تم التخزين",
+      hasPDF: !!pdfDataUrl
+    };
+    const meta = JSON.parse(localStorage.getItem("archive_metadata") || "[]");
+    meta.unshift(record);
+    if (meta.length > 100) meta.pop();
+    localStorage.setItem("archive_metadata", JSON.stringify(meta));
+    // Save PDF data in IndexedDB
+    if (pdfDataUrl) {
+      await ArchiveDB.save(record.id, pdfDataUrl);
+    }
     hideLoading();
     if (res.success) {
-      showToast("✓ تمت إضافة " + name, "success");
-      await loadEmployeesForForm(name);
-    } else showToast(res.error || "خطأ في الإضافة", "error");
-  } catch(e) { hideLoading(); showToast("خطأ في الاتصال", "error"); }
+      showToast("تم الحفظ في قاعدة التخزين", "success");
+    } else {
+      showToast("تم الحفظ محلياً — تحقق من الاتصال بـ Sheets", "error");
+    }
+  } catch(e) { hideLoading(); showToast("خطأ في التخزين", "error"); console.error(e); }
+}
+
+// ===== CAPTURE PDF AS DATA URL (no download) =====
+async function buildInspectionPDFDataUrl(workers, fileName) {
+  // Re-use existing buildInspectionPDF HTML builder by capturing HTML first
+  // We construct the same HTML as buildInspectionPDF and capture it
+  const htmlContent = buildInspectionPDFHtml(workers, fileName);
+  return await captureAsPDFDataUrl(htmlContent, 860);
+}
+
+async function captureAsPDFDataUrl(htmlContent, w = 794) {
+  if (!htmlContent || htmlContent.trim() === "") throw new Error("محتوى التقرير فارغ");
+  const zone = document.getElementById("pdf-render");
+  zone.innerHTML = htmlContent;
+  zone.style.width = w + "px";
+  zone.style.height = "auto";
+  zone.style.position = "absolute";
+  // top:0 is required — browsers skip rendering elements far below/above viewport
+  zone.style.top = "0";
+  zone.style.left = "-99999px";
+  zone.style.visibility = "visible";
+  zone.style.pointerEvents = "none";
+  zone.style.zIndex = "-9999";
+  const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+  document.documentElement.setAttribute("data-theme", "light");
+  if (!document.body.contains(zone)) document.body.appendChild(zone);
+  await new Promise(r => setTimeout(r, 500));
+  const contentHeight = zone.scrollHeight || zone.offsetHeight;
+  if (!contentHeight || contentHeight < 30) {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    zone.innerHTML = "";
+    throw new Error("المحتوى فارغ بعد الانتظار");
+  }
+  try {
+    const canvas = await html2canvas(zone, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      width: w,
+      height: contentHeight,
+      backgroundColor: "#ffffff",
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: w + 200,
+      windowHeight: contentHeight + 200
+    });
+    if (!canvas || canvas.width < 10 || canvas.height < 10) throw new Error("canvas فارغ");
+    const imgData = canvas.toDataURL("image/jpeg", 0.90);
+    if (!imgData || imgData.length < 100) throw new Error("بيانات الصورة تالفة");
+    const { jsPDF } = window.jspdf;
+    const pdfW = 210;
+    const pdfH = (canvas.height / canvas.width) * pdfW;
+    let doc;
+    if (pdfH > 297) {
+      doc = new jsPDF({ orientation: "portrait", unit: "mm", format: [pdfW, pdfH] });
+    } else {
+      doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    }
+    doc.addImage(imgData, "JPEG", 0, 0, pdfW, pdfH);
+    return doc.output("datauristring");
+  } finally {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    zone.innerHTML = "";
+  }
 }
 
 async function saveWorkerSalary(workerIdx, fileIdx) {
@@ -1683,6 +1956,23 @@ async function loadEmployeeDetail() {
     ]);
     hideLoading();
     document.getElementById("emp-detail-phone-input").value = phoneRes.phone || "";
+    document.getElementById("emp-detail-daily-salary").value = "";
+    const summEl = document.getElementById("emp-insp-summary");
+    if (summEl) summEl.style.display = "none";
+    if (inspectionFiles.length) {
+      const sheetIds = inspectionFiles.map(f => f.id);
+      apiCall("getWorkerInspectionSummary", { name, sheetIds }).then(s => {
+        if (s && s.success) {
+          const salaryEl = document.getElementById("emp-detail-daily-salary");
+          if (salaryEl && s.dailySalary) salaryEl.value = s.dailySalary;
+          if (summEl) {
+            summEl.innerHTML = "عدد مرات الظهور في ملفات التفقد: <strong>" + s.appearances + "</strong>"
+              + (s.dailySalary ? " &nbsp;|&nbsp; الراتب اليومي: <strong>" + Number(s.dailySalary).toLocaleString() + "</strong>" : "");
+            summEl.style.display = "block";
+          }
+        }
+      }).catch(function(){});
+    }
     currentEmpTransactions = (txRes.transactions || []).filter(tx => tx.name === name);
     // Calculate balance
     const usdBalance = currentEmpTransactions.reduce((s, tx) => s + (parseFloat(tx.usd) || 0), 0);
@@ -1744,7 +2034,8 @@ async function saveEmployeeEdit() {
   if (!WEBAPP_URL) { showToast("يرجى إعداد رابط Web App أولاً", "error"); return; }
   showLoading("جاري حفظ البيانات...");
   try {
-    const res = await apiPost("updateEmployee", { name: currentEmployeeName, newName, phone });
+    const dailySalary = parseFloat(document.getElementById("emp-detail-daily-salary").value) || 0;
+    const res = await apiPost("updateEmployee", { name: currentEmployeeName, newName, phone, dailySalary });
     hideLoading();
     if (res.success) {
       showToast("تم حفظ البيانات بنجاح ✓", "success");
@@ -1992,6 +2283,326 @@ function copyCalcResult() {
   navigator.clipboard.writeText(result).then(() => showToast("تم نسخ النتيجة","success")).catch(() => showToast("فشل النسخ","error"));
 }
 
+// ===================== قاعدة التخزين — IndexedDB & Functions =====================
+
+const ArchiveDB = {
+  _db: null,
+  async open() {
+    if (this._db) return this._db;
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open("AlmounaArchiveDB", 1);
+      req.onupgradeneeded = function(e) {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains("pdfs")) {
+          db.createObjectStore("pdfs", { keyPath: "id" });
+        }
+      };
+      req.onsuccess = (e) => { this._db = e.target.result; resolve(this._db); };
+      req.onerror = (e) => reject(e);
+    });
+  },
+  async save(id, pdfData) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("pdfs", "readwrite");
+      tx.objectStore("pdfs").put({ id: String(id), pdfData });
+      tx.oncomplete = resolve;
+      tx.onerror = reject;
+    });
+  },
+  async get(id) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("pdfs", "readonly");
+      const req = tx.objectStore("pdfs").get(String(id));
+      req.onsuccess = (e) => resolve(e.target.result ? e.target.result.pdfData : null);
+      req.onerror = reject;
+    });
+  },
+  async delete(id) {
+    const db = await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction("pdfs", "readwrite");
+      tx.objectStore("pdfs").delete(String(id));
+      tx.oncomplete = resolve;
+      tx.onerror = reject;
+    });
+  }
+};
+
+// Build inspection PDF HTML (shared by download + store)
+function buildInspectionPDFHtml(workers, fileName) {
+  const today = new Date().toLocaleDateString("ar-EG");
+  const DAYS = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+  const rows = workers.map((w, i) => {
+    const net  = parseFloat(w.netSalary) || 0;
+    const full = parseFloat(w.fullSalary) || 0;
+    const pay  = parseFloat(w.payments) || 0;
+    const netStyle = net >= 0 ? "background:#dcfce7;color:#15803d;font-weight:bold;" : "background:#fee2e2;color:#dc2626;font-weight:bold;";
+    const bg = i % 2 === 0 ? "#fff" : "#f0f4f8";
+    const daysArr = Array.isArray(w.daysDetail) ? w.daysDetail : Array(7).fill(false);
+    const otArr   = Array.isArray(w.overtimeDetail) ? w.overtimeDetail : Array(7).fill(0);
+    const dayCells = DAYS.map((d, di) => {
+      const worked = daysArr[di]; const ot = otArr[di] || 0;
+      if (worked) {
+        const lbl = ot > 0 ? d + "<br><small>" + ot + "h</small>" : d;
+        return "<td style='padding:5px 3px;border:1px solid #e2e8f0;text-align:center;background:#dcfce7;color:#15803d;font-weight:bold;font-size:11px;min-width:65px;'>" + lbl + "</td>";
+      } else if (ot > 0) {
+        return "<td style='padding:5px 3px;border:1px solid #e2e8f0;text-align:center;background:#fef9c3;color:#854d0e;font-size:11px;min-width:65px;'>" + d + "<br><small>" + ot + "h</small></td>";
+      }
+      return "<td style='padding:5px 3px;border:1px solid #e2e8f0;text-align:center;color:#cbd5e1;font-size:13px;min-width:65px;'>—</td>";
+    }).join("");
+    return "<tr style='background:" + bg + "'>"
+      + "<td style='padding:7px 4px;border:1px solid #e2e8f0;text-align:center;font-size:12px;'>" + (i+1) + "</td>"
+      + "<td style='padding:7px 4px;border:1px solid #e2e8f0;text-align:right;font-weight:bold;font-size:12px;min-width:95px;'>" + w.name + "</td>"
+      + dayCells
+      + "<td style='padding:7px 4px;border:1px solid #e2e8f0;text-align:center;font-size:12px;'>" + pay.toLocaleString() + "</td>"
+      + "<td style='padding:7px 4px;border:1px solid #e2e8f0;text-align:center;font-weight:bold;font-size:12px;'>" + full.toLocaleString() + "</td>"
+      + "<td style='padding:7px 4px;border:1px solid #e2e8f0;text-align:center;" + netStyle + "font-size:12px;'>" + (net >= 0 ? "+" : "") + net.toLocaleString() + "</td>"
+      + "</tr>";
+  }).join("");
+  const totPay  = workers.reduce((s, w) => s + (parseFloat(w.payments)||0), 0);
+  const totFull = workers.reduce((s, w) => s + (parseFloat(w.fullSalary)||0), 0);
+  const totNet  = workers.reduce((s, w) => s + (parseFloat(w.netSalary)||0), 0);
+  const dayHeaders = DAYS.map(d => "<th style='padding:8px 3px;border:1px solid #2d4a6e;font-size:11px;min-width:65px;'>" + d + "</th>").join("");
+  return "<div style='padding:20px;width:1060px;background:#fff;font-family:Arial,sans-serif;direction:rtl;color:#1a2332;'>"
+    + "<img src='" + PDF_LOGO + "' style='width:62px;height:62px;object-fit:contain;display:block;margin:0 auto 5px;'>"
+    + "<div style='text-align:center;font-size:18px;font-weight:bold;color:#1a3a5c;margin-bottom:3px;'>مؤسسة المنى | Societe Almouna</div>"
+    + "<div style='text-align:center;font-size:13px;color:#7c3aed;font-weight:bold;margin-bottom:3px;'>تقرير التفقد الأسبوعي</div>"
+    + "<div style='text-align:center;font-size:12px;color:#555;margin-bottom:2px;'>الملف: " + fileName + "</div>"
+    + "<div style='text-align:center;font-size:11px;color:#888;margin-bottom:16px;'>تاريخ التقرير: " + today + "</div>"
+    + "<table style='width:100%;border-collapse:collapse;'>"
+    +   "<thead><tr style='background:#1a3a5c;color:#fff;font-size:12px;'>"
+    +     "<th style='padding:8px 4px;border:1px solid #2d4a6e;min-width:28px;'>#</th>"
+    +     "<th style='padding:8px 4px;border:1px solid #2d4a6e;min-width:95px;'>الاسم</th>"
+    +     dayHeaders
+    +     "<th style='padding:8px 4px;border:1px solid #2d4a6e;min-width:68px;'>الدفعات</th>"
+    +     "<th style='padding:8px 4px;border:1px solid #2d4a6e;min-width:75px;'>الراتب الكامل</th>"
+    +     "<th style='padding:8px 4px;border:1px solid #2d4a6e;min-width:75px;'>الصافي النهائي</th>"
+    +   "</tr></thead>"
+    +   "<tbody>" + rows
+    +   "<tr style='background:#d4a017;'>"
+    +     "<td colspan='2' style='padding:8px 4px;border:1px solid #b38a00;font-weight:bold;color:#fff;text-align:center;font-size:12px;'>الإجمالي</td>"
+    +     "<td colspan='7' style='border:1px solid #b38a00;'></td>"
+    +     "<td style='padding:8px 4px;border:1px solid #b38a00;font-weight:bold;color:#fff;text-align:center;font-size:12px;'>" + totPay.toLocaleString() + "</td>"
+    +     "<td style='padding:8px 4px;border:1px solid #b38a00;font-weight:bold;color:#fff;text-align:center;font-size:12px;'>" + totFull.toLocaleString() + "</td>"
+    +     "<td style='padding:8px 4px;border:1px solid #b38a00;font-weight:bold;color:#fff;text-align:center;font-size:12px;'>" + (totNet >= 0 ? "+" : "") + totNet.toLocaleString() + "</td>"
+    +   "</tr></tbody>"
+    + "</table>"
+    + "<div style='margin-top:16px;text-align:center;font-size:11px;color:#888;'>مؤسسة المنى - إدارة المحاسبة المالية</div>"
+    + "</div>";
+}
+
+// ===== قاعدة التخزين — Main Functions =====
+
+let _currentPDFId = null;
+let _currentPDFDataUrl = null;
+
+async function loadStorageBase() {
+  const container = document.getElementById("storage-base-content");
+  if (!container) return;
+  // Merge local + remote records
+  const localMeta = JSON.parse(localStorage.getItem("archive_metadata") || "[]");
+  container.innerHTML = "";
+  if (!localMeta.length) {
+    // Try loading from Sheets as well if WEBAPP_URL is set
+    if (WEBAPP_URL) {
+      showLoading("جاري تحميل السجلات...");
+      try {
+        const res = await apiCall("getStorageRecords");
+        hideLoading();
+        if (res.success && res.records && res.records.length) {
+          renderStorageList(res.records, container, false);
+          return;
+        }
+      } catch(e) { hideLoading(); }
+    }
+    container.innerHTML = '<div class="empty-state"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg><p>لا توجد سجلات محفوظة بعد.<br>استخدم زر "تخزين الجدول" في شاشة التفقد.</p></div>';
+    return;
+  }
+  renderStorageList(localMeta, container, true);
+}
+
+function renderStorageList(records, container, hasLocal) {
+  container.innerHTML = '<div style="font-size:12px;color:var(--text3);margin-bottom:12px;padding:0 2px;">' + records.length + ' سجل محفوظ</div>';
+  container.innerHTML += records.map(r => {
+    const hasPDF = hasLocal ? (r.hasPDF !== false) : false;
+    const id = r.id || "";
+    return '<div class="archive-item">'
+      + '<div class="archive-item-top">'
+      + '<div>'
+      + '<div class="archive-item-name">' + (r.tableName || "جدول") + '</div>'
+      + '<div class="archive-item-meta">' + (r.archiveDate || "") + ' &nbsp;|&nbsp; ' + (r.archiveTime || "") + '</div>'
+      + '<div class="archive-item-meta" style="margin-top:3px;">عدد الموظفين: <strong>' + (r.workerCount || 0) + '</strong></div>'
+      + '</div>'
+      + '<span class="archive-badge">' + (r.status || "محفوظ") + '</span>'
+      + '</div>'
+      + '<div class="archive-actions">'
+      + (hasPDF
+          ? '<button class="btn btn-sm btn-primary" onclick="viewArchivePDF(\'' + id + '\', \'' + (r.tableName||"").replace(/'/g,"") + '\')">عرض PDF</button>'
+          : '<button class="btn btn-sm btn-outline" style="opacity:0.5;cursor:default;">لا يوجد PDF</button>')
+      + (hasPDF
+          ? '<button class="btn btn-sm btn-outline" onclick="shareArchivePDF(\'' + id + '\', \'' + (r.tableName||"").replace(/'/g,"") + '\')">مشاركة</button>'
+          : '')
+      + '<button class="btn btn-sm btn-danger" onclick="deleteArchiveRecord(\'' + id + '\', ' + (r.row || 0) + ')">حذف</button>'
+      + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+async function viewArchivePDF(id, name) {
+  showLoading("جاري تحميل التقرير...");
+  try {
+    const pdfData = await ArchiveDB.get(id);
+    hideLoading();
+    if (!pdfData) {
+      showToast("ملف PDF غير متوفر لهذا السجل", "error");
+      return;
+    }
+    _currentPDFId = id;
+    _currentPDFDataUrl = pdfData;
+    document.getElementById("pdf-viewer-title").textContent = name || "عرض التقرير";
+    document.getElementById("pdf-viewer-frame").src = pdfData;
+    openModal("pdf-viewer-modal");
+  } catch(e) {
+    hideLoading();
+    showToast("خطأ في تحميل PDF", "error");
+  }
+}
+
+async function sharePDFFromViewer() {
+  if (!_currentPDFDataUrl) { showToast("لا يوجد ملف PDF محمّل", "error"); return; }
+  const name = document.getElementById("pdf-viewer-title").textContent || "تقرير";
+  try {
+    const res = await fetch(_currentPDFDataUrl);
+    const blob = await res.blob();
+    const file = new File([blob], name.replace(/\s/g,"_") + ".pdf", { type: "application/pdf" });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: name });
+    } else {
+      downloadPDFFromViewer();
+    }
+  } catch(e) {
+    downloadPDFFromViewer();
+  }
+}
+
+function downloadPDFFromViewer() {
+  if (!_currentPDFDataUrl) { showToast("لا يوجد ملف PDF محمّل", "error"); return; }
+  const name = document.getElementById("pdf-viewer-title").textContent || "تقرير";
+  const a = document.createElement("a");
+  a.href = _currentPDFDataUrl;
+  a.download = name.replace(/\s/g,"_") + ".pdf";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast("جاري التنزيل...", "success");
+}
+
+async function shareArchivePDF(id, name) {
+  showLoading("جاري تجهيز الملف...");
+  try {
+    const pdfData = await ArchiveDB.get(id);
+    hideLoading();
+    if (!pdfData) { showToast("ملف PDF غير متوفر", "error"); return; }
+    const res = await fetch(pdfData);
+    const blob = await res.blob();
+    const file = new File([blob], (name||"تقرير").replace(/\s/g,"_") + ".pdf", { type: "application/pdf" });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: name || "تقرير التفقد" });
+    } else {
+      const a = document.createElement("a");
+      a.href = pdfData;
+      a.download = (name||"تقرير").replace(/\s/g,"_") + ".pdf";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      showToast("تم التنزيل", "success");
+    }
+  } catch(e) {
+    hideLoading();
+    showToast("خطأ في المشاركة", "error");
+  }
+}
+
+async function deleteArchiveRecord(id, sheetRow) {
+  showConfirmDialog(
+    "حذف السجل",
+    "هل أنت متأكد من حذف هذا السجل؟\nسيتم حذفه من الجهاز وقاعدة البيانات.\nلا يمكن التراجع.",
+    async function() { await _doDeleteArchiveRecord(id, sheetRow); },
+    "حذف"
+  );
+}
+async function _doDeleteArchiveRecord(id, sheetRow) {
+  // Remove from localStorage
+  let meta = JSON.parse(localStorage.getItem("archive_metadata") || "[]");
+  meta = meta.filter(r => r.id !== id);
+  localStorage.setItem("archive_metadata", JSON.stringify(meta));
+  // Remove from IndexedDB
+  await ArchiveDB.delete(id);
+  // Try to remove from Sheets
+  if (WEBAPP_URL && sheetRow > 1) {
+    try {
+      await apiPost("deleteStorageRecord", { row: sheetRow });
+    } catch(e) {}
+  }
+  showToast("تم حذف السجل", "success");
+  loadStorageBase();
+}
+
+// ===== تحويل الموظف =====
+
+function openTransferEmpModal() {
+  if (!currentEmployeeName) return;
+  if (!inspectionFiles || !inspectionFiles.length) {
+    showToast("لا توجد ملفات تفقد مضافة", "error");
+    return;
+  }
+  const info = document.getElementById("transfer-emp-info");
+  info.innerHTML = "الموظف: <strong>" + currentEmployeeName + "</strong>";
+  const filesDiv = document.getElementById("transfer-emp-files");
+  filesDiv.innerHTML = inspectionFiles.map((f, i) =>
+    '<div class="transfer-emp-file-item">'
+    + '<input type="checkbox" id="tf-' + i + '" value="' + i + '"'
+    + ' style="width:20px;height:20px;accent-color:#7c3aed;cursor:pointer;flex-shrink:0;">'
+    + '<label for="tf-' + i + '" style="cursor:pointer;flex:1;">'
+    + '<div style="font-size:14px;font-weight:600;">' + f.name + '</div>'
+    + '<div style="font-size:12px;color:var(--text3);">ملف تفقد</div>'
+    + '</label>'
+    + '</div>'
+  ).join("");
+  const empData = employeesData.find(e => e.name === currentEmployeeName);
+  document.getElementById("transfer-daily-salary").value =
+    document.getElementById("emp-detail-daily-salary").value || "";
+  openModal("transfer-emp-modal");
+}
+
+async function confirmTransferEmployee() {
+  const name = currentEmployeeName;
+  const dailySalary = parseFloat(document.getElementById("transfer-daily-salary").value) || 0;
+  const selected = [];
+  inspectionFiles.forEach((f, i) => {
+    const cb = document.getElementById("tf-" + i);
+    if (cb && cb.checked) selected.push({ file: f, idx: i });
+  });
+  if (!selected.length) { showToast("اختر ملف تفقد واحداً على الأقل", "error"); return; }
+  if (!WEBAPP_URL) { showToast("يرجى إعداد رابط Web App أولاً", "error"); return; }
+  closeModal("transfer-emp-modal");
+  showLoading("جاري تحويل الموظف...");
+  let ok = 0, fail = 0;
+  for (const { file } of selected) {
+    try {
+      const res = await apiPost("addWorkerToInspection", { sheetId: file.id, name, dailySalary });
+      if (res.success) ok++;
+      else fail++;
+    } catch(e) { fail++; }
+  }
+  hideLoading();
+  if (ok > 0) {
+    showToast("تم إضافة " + name + " إلى " + ok + " ملف تفقد" + (fail > 0 ? " (فشل " + fail + ")" : ""), "success");
+  } else {
+    showToast("فشل التحويل — تحقق من الاتصال", "error");
+  }
+}
+
 // ===================== APPS SCRIPT CODE (UPDATED v3) =====================
 const APPS_SCRIPT_CODE = `const SPREADSHEET_ID = "1KSGUOUYPNwa7aNtJdDXkjVbLjYt0WkRt9rBfZ1dO0wU";
 const TRANS_SHEET = "المعاملات";
@@ -2014,6 +2625,13 @@ function handleRequest(e,postParams){
     else if(p.action==="getInspectionData")result=getInspectionData(p.sheetId);
     else if(p.action==="updateWorkerAttendance")result=updateWorkerAttendance(p);
     else if(p.action==="updateWorkerPayment")result=updateWorkerPayment(p);
+    else if(p.action==="clearInspectionData")result=clearInspectionData(p);
+    else if(p.action==="archiveInspectionData")result=archiveInspectionData(p);
+    else if(p.action==="getWorkerInspectionSummary")result=getWorkerInspectionSummary(p);
+    else if(p.action==="updateWorkerDailySalary")result=updateWorkerDailySalary(p);
+    else if(p.action==="addWorkerToInspection")result=addWorkerToInspection(p);
+    else if(p.action==="getStorageRecords")result=getStorageRecords();
+    else if(p.action==="deleteStorageRecord")result=deleteStorageRecord(p);
     else result={success:false,error:"Unknown action"};
   }catch(err){result={success:false,error:err.message};}
   return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
@@ -2163,10 +2781,109 @@ function getInspectionData(sheetId){
       if(worked){days++;overtime+=ot;}
       else if(ot>0){overtime+=ot;} // Count standalone OT hours
     });
-    workers.push({name,days,overtime,daysDetail,overtimeDetail,payments:r[16]||0,fullSalary:r[17]||0,netSalary:r[18]||0});
+    workers.push({name,days,overtime,daysDetail,overtimeDetail,dailySalary:Number(r[15])||0,payments:Number(r[16])||0,fullSalary:Number(r[17])||0,netSalary:Number(r[18])||0});
   });
   return{success:true,workers};
-}`;
+}
+function clearInspectionData(p){
+  var ss=SpreadsheetApp.openById(p.sheetId);
+  var sheet=ss.getSheetByName("العمال العرب");
+  if(!sheet)return{success:false,error:'لا توجد ورقة العمال العرب'};
+  var lastRow=sheet.getLastRow();
+  if(lastRow<6)return{success:true};
+  for(var row=6;row<=lastRow;row++){
+    sheet.getRange(row,3,1,14).clearContent();
+    sheet.getRange(row,18).clearContent();
+  }
+  SpreadsheetApp.flush();
+  return{success:true};
+}
+function archiveInspectionData(p){
+  var ss=SpreadsheetApp.openById(SPREADSHEET_ID);
+  var arch=ss.getSheetByName("قاعدة التخزين");
+  if(!arch){
+    arch=ss.insertSheet("قاعدة التخزين");
+    arch.getRange(1,1,1,5).setValues([["اسم الجدول","تاريخ التخزين","وقت التخزين","عدد الموظفين","الحالة"]]);
+    arch.getRange(1,1,1,5).setFontWeight("bold").setBackground("#1a3a5c").setFontColor("#ffffff");
+  }
+  arch.appendRow([p.tableName||"",p.archiveDate||"",p.archiveTime||"",Number(p.workerCount)||0,"تم التخزين"]);
+  return{success:true};
+}
+function getWorkerInspectionSummary(p){
+  var name=p.name;
+  var sheetIds=p.sheetIds||[];
+  var dailySalary=0,appearances=0;
+  sheetIds.forEach(function(sheetId){
+    try{
+      var ss=SpreadsheetApp.openById(sheetId);
+      var sheet=ss.getSheetByName("العمال العرب");
+      if(!sheet)return;
+      var lastRow=sheet.getLastRow();
+      if(lastRow<6)return;
+      var data=sheet.getRange(6,2,lastRow-5,16).getValues();
+      data.forEach(function(r){
+        if(String(r[0]).trim()===String(name).trim()){
+          appearances++;
+          if(!dailySalary&&r[15])dailySalary=Number(r[15]);
+        }
+      });
+    }catch(ex){}
+  });
+  return{success:true,dailySalary:dailySalary,appearances:appearances};
+}
+function updateWorkerDailySalary(p){
+  var ss=SpreadsheetApp.openById(p.sheetId);
+  var sheet=ss.getSheetByName("العمال العرب");
+  if(!sheet)return{success:false,error:'لا توجد ورقة العمال العرب'};
+  sheet.getRange(Number(p.workerRow),17).setValue(Number(p.dailySalary)||0);
+  SpreadsheetApp.flush();
+  return{success:true};
+}
+function addWorkerToInspection(p){
+  var ss=SpreadsheetApp.openById(p.sheetId);
+  var sheet=ss.getSheetByName("العمال العرب");
+  if(!sheet)return{success:false,error:'لا توجد ورقة العمال العرب'};
+  var newRow=sheet.getLastRow()+1;
+  sheet.getRange(newRow,2).setValue(p.name);
+  if(p.dailySalary)sheet.getRange(newRow,17).setValue(Number(p.dailySalary));
+  SpreadsheetApp.flush();
+  return{success:true,row:newRow};
+}
+function getStorageRecords(){
+  var ss=SpreadsheetApp.openById(SPREADSHEET_ID);
+  var arch=ss.getSheetByName("قاعدة التخزين");
+  if(!arch)return{success:true,records:[]};
+  var lastRow=arch.getLastRow();
+  if(lastRow<2)return{success:true,records:[]};
+  var data=arch.getRange(2,1,lastRow-1,5).getValues();
+  var records=[];
+  for(var i=0;i<data.length;i++){
+    var r=data[i];
+    if(!r[0])continue;
+    records.push({
+      id:"sheets_"+(i+2),
+      tableName:String(r[0]),
+      archiveDate:String(r[1]),
+      archiveTime:String(r[2]),
+      workerCount:Number(r[3])||0,
+      status:String(r[4]||"محفوظ"),
+      row:i+2,
+      hasPDF:false
+    });
+  }
+  records.reverse();
+  return{success:true,records:records};
+}
+function deleteStorageRecord(p){
+  var ss=SpreadsheetApp.openById(SPREADSHEET_ID);
+  var arch=ss.getSheetByName("قاعدة التخزين");
+  if(!arch)return{success:false,error:"ورقة قاعدة التخزين غير موجودة"};
+  var row=Number(p.row);
+  if(!row||row<2)return{success:false,error:"رقم الصف غير صحيح"};
+  arch.deleteRow(row);
+  return{success:true};
+}
+`;
 
 function copyAppsScriptCode() {
   navigator.clipboard.writeText(APPS_SCRIPT_CODE).then(() => showToast("تم نسخ الكود","success")).catch(() => showToast("فشل النسخ","error"));
@@ -2189,6 +2906,52 @@ document.querySelectorAll(".modal-overlay").forEach(overlay => {
   overlay.addEventListener("click", e => { if (e.target === overlay) overlay.classList.remove("open"); });
 });
 </script>
+
+<!-- Transfer Employee Modal -->
+<div class="modal-overlay" id="transfer-emp-modal">
+  <div class="modal">
+    <div class="modal-title">تحويل الموظف <button onclick="closeModal('transfer-emp-modal')" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);">&#215;</button></div>
+    <div id="transfer-emp-info" style="font-size:13px;color:var(--text2);margin-bottom:14px;padding:10px 12px;background:var(--surface2);border-radius:8px;"></div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px;">اختر ملفات التفقد لإضافة الموظف إليها:</p>
+    <div id="transfer-emp-files"></div>
+    <div class="form-group" style="margin-top:12px;">
+      <label class="form-label">الراتب اليومي</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="number" class="form-input" id="transfer-daily-salary" placeholder="0" min="0" style="flex:1;">
+        <span style="font-size:13px;color:var(--text3);white-space:nowrap;">يومياً</span>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-primary" onclick="confirmTransferEmployee()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        تأكيد التحويل
+      </button>
+      <button class="btn btn-outline" onclick="closeModal('transfer-emp-modal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Viewer Modal -->
+<div class="modal-overlay" id="pdf-viewer-modal">
+  <div class="modal" style="max-width:820px;width:96%;padding:16px;">
+    <div class="modal-title" style="margin-bottom:12px;">
+      <span id="pdf-viewer-title" style="font-size:15px;">عرض التقرير</span>
+      <button onclick="closeModal('pdf-viewer-modal')" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);">&#215;</button>
+    </div>
+    <iframe id="pdf-viewer-frame" class="pdf-viewer-frame" src="about:blank"></iframe>
+    <div class="btn-row" style="margin-top:12px;">
+      <button class="btn btn-primary" onclick="sharePDFFromViewer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+        مشاركة
+      </button>
+      <button class="btn btn-outline" onclick="downloadPDFFromViewer()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        تنزيل
+      </button>
+      <button class="btn btn-outline" onclick="closeModal('pdf-viewer-modal')">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── Hidden employees floating dropdown ── -->
 <div id="hidden-dropdown" class="hidden-dropdown">
